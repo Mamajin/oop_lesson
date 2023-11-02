@@ -92,6 +92,16 @@ class AccountDB:
                 return account
         return None
 
+    def delete(self, account_num):
+        """
+        new delete method
+        :param account_num:
+        :return:
+        """
+        for account in self.account_database:
+            if account.account_number == account_num:
+                self.account_database.remove(account)
+
     def __str__(self):
         s = ''
         for account in self.account_database:
@@ -124,16 +134,33 @@ account2 = Account("0001", "checking", "John Hennessy", 2000)
 account3 = Account("0003", "saving", "Mark Hill", 3000)
 account4 = Account("0004", "saving", "David Wood", 4000)
 account5 = Account("0004", "saving", "David Wood", 4000)
+# account 10
+account10 = Account("0010", "saving", "David Wood", 4000)
+
 my_account_DB = AccountDB()
 my_account_DB.insert(account1)
 my_account_DB.insert(account2)
 my_account_DB.insert(account3)
 my_account_DB.insert(account4)
 my_account_DB.insert(account5)
+# insert new test object
+my_account_DB.insert(account10)
+
 print(my_account_DB)
 my_account_DB.search_public("0003").deposit(50)
 print(my_account_DB)
 my_account_DB.search_public("0003").withdraw(100)
 print(my_account_DB)
 my_account_DB.search_public("0010").deposit(50)
+print(my_account_DB)
+
+# delete method test case
+# deletes nothing
+my_account_DB.delete("0002")
+print(my_account_DB)
+# delete data of account 0003
+my_account_DB.delete("0003")
+print(my_account_DB)
+# delete data of account 0000
+my_account_DB.delete("0000")
 print(my_account_DB)
