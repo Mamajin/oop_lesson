@@ -181,9 +181,23 @@ my_table4 = my_table3.filter(lambda x: x['EU'] == 'yes').filter(
     lambda x: x['coastline'] == 'no'
 )
 # print(my_table4) this is the filtered table EU yes and no coastline
+print()
+print("Print min and max temp of country in EU with no coastline")
 print(my_table4.aggregate(lambda x: min(x), 'temperature'))
 print(my_table4.aggregate(lambda x: max(x), 'temperature'))
+print()
 
 # test case: Print min and max latitude for cities in every country
-print(my_table3.aggregate(lambda x: min(x), 'latitude'))
-print(my_table3.aggregate(lambda x: max(x), 'latitude'))
+country_ls = []
+# use a for loop to store all the country in a list without duplicates
+for i in range(len(my_table3.table)):
+    if my_table3.table[i]['country'] not in country_ls:
+        country_ls.append(my_table3.table[i]['country'])
+# for every country in the list find the mix and max and display
+for country in country_ls:
+    country_min = my_table3.filter(lambda x: x['country'] == country).aggregate(lambda x: min(x), 'latitude')
+    country_max = my_table3.filter(lambda x: x['country'] == country).aggregate(lambda x: max(x), 'latitude')
+    print(f"{country} Latitude min: {country_min}, max: {country_max}")
+
+
+
