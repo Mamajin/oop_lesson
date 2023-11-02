@@ -63,9 +63,20 @@ class DB:
         self.database = []
 
     def insert(self, table):
+        """
+        append table into database
+        :param table:
+        :return:
+        """
         self.database.append(table)
 
     def search(self, table_name):
+        """
+        search for the table in the database if table does not exist return
+        None.
+        :param table_name:
+        :return:
+        """
         for table in self.database:
             if table.table_name == table_name:
                 return table
@@ -81,6 +92,14 @@ class Table:
         self.table = table
 
     def join(self, other_table, common_key):
+        """
+        between two files cities and countries join them if they have a common
+        key this case country and turn it into a bigger table the return the
+        joined table
+        :param other_table:
+        :param common_key:
+        :return:
+        """
         joined_table = Table(
             self.table_name + '_joins_' + other_table.table_name, [])
         for item1 in self.table:
@@ -93,6 +112,11 @@ class Table:
         return joined_table
 
     def filter(self, condition):
+        """
+        input condition and return a filtered table
+        :param condition:
+        :return:
+        """
         filtered_table = Table(self.table_name + '_filtered', [])
         for item1 in self.table:
             if condition(item1):
@@ -100,6 +124,12 @@ class Table:
         return filtered_table
 
     def aggregate(self, function, aggregation_key):
+        """
+        find avg of the key we put in
+        :param function:
+        :param aggregation_key:
+        :return:
+        """
         temps = []
         for item1 in self.table:
             temps.append(float(item1[aggregation_key]))
@@ -145,4 +175,15 @@ my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'no').filter(
     lambda x: float(x['temperature']) < 5.0)
 print(my_table3_filtered.table)
 
+# test case: Print min and max temp of cities in EU without coastline
+# print(my_table3)
+my_table4 = my_table3.filter(lambda x: x['EU'] == 'yes').filter(
+    lambda x: x['coastline'] == 'no'
+)
+# print(my_table4) this is the filtered table EU yes and no coastline
+print(my_table4.aggregate(lambda x: min(x), 'temperature'))
+print(my_table4.aggregate(lambda x: max(x), 'temperature'))
 
+# test case: Print min and max latitude for cities in every country
+print(my_table3.aggregate(lambda x: min(x), 'latitude'))
+print(my_table3.aggregate(lambda x: max(x), 'latitude'))
